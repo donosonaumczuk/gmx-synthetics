@@ -1247,14 +1247,15 @@ library MarketUtils {
     ) internal view returns (uint256, bool, int256) {
         GetNextFundingFactorPerSecondCache memory cache;
 
-        cache.diffUsd = Calc.diff(longOpenInterest, shortOpenInterest);
         cache.totalOpenInterest = longOpenInterest + shortOpenInterest;
-
-        if (cache.diffUsd == 0) { return (0, true, 0); }
 
         if (cache.totalOpenInterest == 0) {
             revert Errors.UnableToGetFundingFactorEmptyOpenInterest();
         }
+
+        cache.diffUsd = Calc.diff(longOpenInterest, shortOpenInterest);
+
+        if (cache.diffUsd == 0) { return (0, true, 0); }
 
         cache.fundingExponentFactor = getFundingExponentFactor(dataStore, market);
 
